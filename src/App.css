@@ -27,6 +27,23 @@
 .App-link {
   color: #61dafb;
 }
+.mapContainer {
+  position: relative;
+  height: 45vh;
+  width: 100%;
+}
+.sidebarStyle {
+  display: inline-block;
+  position: relative;
+  top: 0;
+  left: 0;
+  margin: 12px;
+  background-color: #404040;
+  color: #ffffff;
+  z-index: 1 !important;
+  padding: 6px;
+  font-weight: bold;
+}
 
 @keyframes App-logo-spin {
   from {
