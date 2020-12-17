@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
+import { Map, GoogleApiWrapper } from 'google-maps-react';
 
 export class Gmap extends Component {
   state = {
@@ -32,9 +32,6 @@ export class Gmap extends Component {
   };
 
   startDirection = () => {
-    /* const { google } = mapProps;
-    let directionsService = new google.maps.DirectionsService();
-    let directionsRenderer = new google.maps.DirectionsRenderer(); */
     this.state.distanceMatrixSerice.getDistanceMatrix(
       {
         origins: [this.state.origin],
@@ -43,7 +40,6 @@ export class Gmap extends Component {
       },
       (response) => {
         this.props.getDistance(response.rows[0].elements[0].distance.value);
-        /*  console.log(response.rows[0].elements[0].distance.value); */
       }
     );
 
@@ -51,7 +47,6 @@ export class Gmap extends Component {
       {
         origin: this.state.origin,
         destination: this.state.destination,
-        /*   waypoints: waypts, */
         travelMode: this.props.google.maps.TravelMode.DRIVING,
       },
       (response, status) => {
@@ -68,15 +63,19 @@ export class Gmap extends Component {
   render() {
     return (
       <Map
-        style={{ width: '100%', height: '45vh' }}
+        containerStyle={{ width: '40%', height: '45vh' }}
         google={this.props.google}
-        zoom={14}
+        zoom={10}
         onReady={this.setDirectionsToMap}
-      ></Map>
+        initialCenter={{
+          lat: 41.3947688,
+          lng: 2.078728,
+        }}
+      />
     );
   }
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyCFVCHnHM4zzb3RV3nkZW260svhJYKsaXI',
+  apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
 })(Gmap);

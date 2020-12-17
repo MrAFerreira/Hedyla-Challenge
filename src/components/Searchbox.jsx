@@ -1,14 +1,38 @@
 import React, { Component } from 'react';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
+import styled from 'styled-components';
+
+/* Styled Components */
+
+const StyledUl = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0px;
+  background-color: white;
+  color: black;
+  position: fixed;
+  z-index: 2;
+`;
+
+const StyledLi = styled.li`
+  text-align: left;
+  height: 100%;
+  padding: 10px;
+  &:hover {
+    background-color: lightgray;
+  }
+`;
+
 class Searchbox extends Component {
   constructor(props) {
     super(props);
     this.state = {
       address: '',
-      latLng: '',
+      lat: '',
+      lng: '',
       name: '',
-      id: '',
     };
   }
 
@@ -24,8 +48,8 @@ class Searchbox extends Component {
         return getLatLng(results[0]);
       })
       .then((latLng) => {
-        this.setState({ latLng: latLng, name });
-        this.props.addPosition(this.state.latLng);
+        this.setState({ lat: latLng.lat, lng: latLng.lng, name });
+        this.props.addPosition({ lat: this.state.lat, lng: this.state.lng, name: this.state.name });
       })
       .catch((error) => console.error('Error', error));
   };
@@ -45,26 +69,16 @@ class Searchbox extends Component {
                 className: 'location-search-input',
               })}
             />
-            <div className="autocomplete-dropdown-container">
+            <StyledUl className="autocomplete-dropdown-container">
               {loading && <div>Loading...</div>}
               {suggestions.map((suggestion) => {
-                const className = suggestion.active ? 'suggestion-item--active' : 'suggestion-item';
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
                 return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
+                  <StyledLi {...getSuggestionItemProps(suggestion)}>
                     <span>{suggestion.description}</span>
-                  </div>
+                  </StyledLi>
                 );
               })}
-            </div>
+            </StyledUl>
           </div>
         )}
       </PlacesAutocomplete>
